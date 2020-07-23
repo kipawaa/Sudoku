@@ -139,34 +139,17 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 	if (complete(puzzle3)) printf("passed test 3! This is one of the \"Expert\" puzzles from the book. I bet you've got it no problem.\n");
 	else {printf(":( failed test 3:\nYour solution was:\n"); print_sudoku(puzzle3); return 0;}
 
+	
 	// TEST 4
-	int puzzle4[9][9] = {
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 3, 0, 8, 5},
-		{0, 0, 1, 0, 2, 0, 0, 0, 0},
-		{0, 0, 0, 5, 0, 7, 0, 0, 0},
-		{0, 0, 4, 0, 0, 0, 1, 0, 0},
-		{0, 9, 0, 0, 0, 0, 0, 0, 0},
-		{5, 0, 0, 0, 0, 0, 0, 7, 3},
-		{0, 0, 2, 0, 1, 0, 0, 0, 0},
-		{0, 0, 0, 0, 4, 0, 0, 0, 9}
-	};
+	int puzzle4[9][9] = {0};
 
 	solver(puzzle4, 0);
 
-	if (complete(puzzle4)) printf("passed test 4! That was the \"brute-force killer!\" If you got that guy, you're doing well. For added challenge, try a clever solution to avoid being slowed down by this guy.\n");
-	else {printf(":( failed test 4:\nYour solution was:\n"); print_sudoku(puzzle4); return 0;}
+	if (complete(puzzle4)) printf("passed test 4! That one was an empty board, so it's kinda cool that your algorithm can solve that!\n");
+	else {printf(":( failed test 4\n your solution was:\n"); print_sudoku(puzzle4); return 0;}
 
 	// TEST 5
-	int puzzle5[9][9] = {0};
-
-	solver(puzzle5, 0);
-
-	if (complete(puzzle5)) printf("passed test 5! That one was an empty board, so it's kinda cool that your algorithm can solve that!\n");
-	else {printf(":( failed test 5\n your solution was:\n"); print_sudoku(puzzle5); return 0;}
-
-	// TEST 6
-	int puzzle6[9][9] = {
+	int puzzle5[9][9] = {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -178,10 +161,10 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 		{0, 0, 0, 0, 0, 0, 0, 0, 2}
 	};
 
-	solver(puzzle6, 0);
+	solver(puzzle5, 0);
 
-	if (complete(puzzle6)) printf("passed test 6! That one had only 4 hints at the start! How crazy is that?!\n");
-	else {printf("failed test 6 :(\n Your solution was:\n"); print_sudoku(puzzle6); return 0;}
+	if (complete(puzzle5)) printf("passed test 5! That one had only 4 hints at the start! How crazy is that?!\n");
+	else {printf("failed test 5 :(\n Your solution was:\n"); print_sudoku(puzzle5); return 0;}
 
 	printf("\nYou got it all! That's crazy! You should make a hot chocolate or something to celebrate :)\n\n");
 
@@ -190,6 +173,7 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 
 // function containing tests designed to substantially slow "brute force" methods of solving sudoku, returns 1 if all are passed, 0 if not
 int brute_force_tests(void (*solver)(int sudoku[9][9], int depth)) {
+	// TEST 1
 	int puzzle1[9][9] = {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -208,6 +192,25 @@ int brute_force_tests(void (*solver)(int sudoku[9][9], int depth)) {
 
 	if (complete(puzzle1)) printf("passed test 1! This was just me learning to make hard sudoku solver breakers so it WILL get harder.\n");
 	else return 0;
+
+	// TEST 2
+	int puzzle2[9][9] = {
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 3, 0, 8, 5},
+		{0, 0, 1, 0, 2, 0, 0, 0, 0},
+		{0, 0, 0, 5, 0, 7, 0, 0, 0},
+		{0, 0, 4, 0, 0, 0, 1, 0, 0},
+		{0, 9, 0, 0, 0, 0, 0, 0, 0},
+		{5, 0, 0, 0, 0, 0, 0, 7, 3},
+		{0, 0, 2, 0, 1, 0, 0, 0, 0},
+		{0, 0, 0, 0, 4, 0, 0, 0, 9}
+	};
+
+	solver(puzzle2, 0);
+
+	if (complete(puzzle2)) printf("passed test 2! That was the \"brute-force killer!\" If you got that guy, you're doing well. For added challenge, try a clever solution to avoid being slowed down by this guy.\n");
+	else {printf(":( failed test 4:\nYour solution was:\n"); print_sudoku(puzzle2); return 0;}
+
 	return 1;
 }
 
@@ -216,7 +219,7 @@ int main() {
 		// general tests
 	int gt = 1;
 		// brute force tests
-	int bf = 1;
+	int bf = 0;
 
 	// to detemrine if a set of tests has been passed (1 by default, will be set to 0 if a test is failed)
 	int passed = 1;

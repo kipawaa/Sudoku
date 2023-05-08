@@ -1,15 +1,17 @@
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
 
 // function to print a sudoku board
 void print_sudoku(int sudoku[9][9]) {
-	printf("current sudoku state:\n");
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
-			printf("%d ", sudoku[i][j]);
-		}
-		printf("\n");
-	}
+        for (int y = 0; y < 9; y++) {
+                for (int x = 0; x < 9; x++) {
+                        printf("%d ", sudoku[y][x]);
+                        if (x % 3 == 2) printf("  ");
+                }
+                printf("\n");
+                if (y % 3 == 2) printf("\n");
+        }
 }
 
 // determines if the board is filled, returns true (1) or false (0)
@@ -214,10 +216,10 @@ int brute_force_tests(void (*solver)(int sudoku[9][9], int depth)) {
 	return 1;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 	// SET TO 1 TO RUN THAT SET OF TESTS, 0 TO SKIP
 		// general tests
-	int gt = 1;
+	int gt = 0;
 		// brute force tests
 	int bf = 0;
 
@@ -240,4 +242,30 @@ int main() {
 		if (passed) printf("passed brute force tests\n");
 		else return 0;
 	}
+
+
+        // regular use case
+        if (argc) {
+                // check input
+                if (argc > 2) {
+                        printf("too many arguments. write the sudoku from left to right, top to bottom with no spaces\n");
+                        exit(1);
+                }
+                
+                // get sudoku from command line input
+                int sudoku[9][9];
+                for (int i = 0; i < strlen(argv[1]); i++) {
+                        sudoku[i/9][i%9] = argv[1][i] - 48;
+                }
+
+                // solve sudoku
+                printf("you input:\n");
+                print_sudoku(sudoku);
+
+                solve_sudoku(sudoku, 0);
+
+                printf("the solution is:\n");
+                print_sudoku(sudoku);
+        }
+
 }

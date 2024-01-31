@@ -3,16 +3,41 @@
 #include<string.h>
 
 // function to print a sudoku board
-void print_sudoku(int sudoku[9][9]) {
+void printSudoku(int sudoku[9][9]) {
         for (int y = 0; y < 9; y++) {
                 for (int x = 0; x < 9; x++) {
+                        // print the number
                         printf("%d ", sudoku[y][x]);
+                        
+                        // separate boxes
                         if (x % 3 == 2) printf("  ");
                 }
+                // newline after each row
                 printf("\n");
+
+                // extra newline to separate boxes
                 if (y % 3 == 2) printf("\n");
         }
 }
+
+
+void printSolved(int original[9][9], int solution[9][9]) {
+        for (int y = 0; y < 9; y++) {
+                for (int x = 0; x < 9; x++) {
+                        // print number
+                        if (original[y][x] == solution[y][x]) // if number was given print black
+                                printf("\033[30m%d ", solution[y][x]);
+                        else printf("\033[38;2;50;139;168m%d ", solution[y][x]); // print found numbers in blue
+
+                        if (x % 3 == 2) printf("  ");
+                }
+                
+                printf("\n");
+
+                if (y % 3 == 2) printf("\n");
+        }
+}
+
 
 // determines if the board is filled, returns true (1) or false (0)
 int complete(int sudoku[9][9]) {
@@ -103,7 +128,7 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 	solver(puzzle1, 0);
 
 	if (complete(puzzle1)) printf("passed test 1! This was the one they gave us :)\n");
-	else {printf(":( failed test 1:\nYour solution was:\n"); print_sudoku(puzzle1); return 0;}
+	else {printf(":( failed test 1:\nYour solution was:\n"); printSudoku(puzzle1); return 0;}
 
 	// TEST 2
 	int puzzle2[9][9] = {
@@ -121,7 +146,7 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 	solver(puzzle2, 0);
 
 	if (complete(puzzle2)) printf("passed test 2! I stole this from my sister's sudoku puzzle book. Supposedly it's medium difficulty. Should be easy for you though ;)\n");
-	else {printf(":( failed test 2:\nYour solution was:\n"); print_sudoku(puzzle2); return 0;}
+	else {printf(":( failed test 2:\nYour solution was:\n"); printSudoku(puzzle2); return 0;}
 
 	// TEST 3
 	int puzzle3[9][9] = {
@@ -139,7 +164,7 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 	solver(puzzle3, 0);
 
 	if (complete(puzzle3)) printf("passed test 3! This is one of the \"Expert\" puzzles from the book. I bet you've got it no problem.\n");
-	else {printf(":( failed test 3:\nYour solution was:\n"); print_sudoku(puzzle3); return 0;}
+	else {printf(":( failed test 3:\nYour solution was:\n"); printSudoku(puzzle3); return 0;}
 
 	
 	// TEST 4
@@ -148,7 +173,7 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 	solver(puzzle4, 0);
 
 	if (complete(puzzle4)) printf("passed test 4! That one was an empty board, so it's kinda cool that your algorithm can solve that!\n");
-	else {printf(":( failed test 4\n your solution was:\n"); print_sudoku(puzzle4); return 0;}
+	else {printf(":( failed test 4\n your solution was:\n"); printSudoku(puzzle4); return 0;}
 
 	// TEST 5
 	int puzzle5[9][9] = {
@@ -166,7 +191,7 @@ int test_sudoku(void (*solver)(int sudoku[9][9], int depth)) {
 	solver(puzzle5, 0);
 
 	if (complete(puzzle5)) printf("passed test 5! That one had only 4 hints at the start! How crazy is that?!\n");
-	else {printf("failed test 5 :(\n Your solution was:\n"); print_sudoku(puzzle5); return 0;}
+	else {printf("failed test 5 :(\n Your solution was:\n"); printSudoku(puzzle5); return 0;}
 
 	printf("\nYou got it all! That's crazy! You should make a hot chocolate or something to celebrate :)\n\n");
 
@@ -211,7 +236,7 @@ int brute_force_tests(void (*solver)(int sudoku[9][9], int depth)) {
 	solver(puzzle2, 0);
 
 	if (complete(puzzle2)) printf("passed test 2! That was the \"brute-force killer!\" If you got that guy, you're doing well. For added challenge, try a clever solution to avoid being slowed down by this guy.\n");
-	else {printf(":( failed test 4:\nYour solution was:\n"); print_sudoku(puzzle2); return 0;}
+	else {printf(":( failed test 4:\nYour solution was:\n"); printSudoku(puzzle2); return 0;}
 
 	return 1;
 }
@@ -245,27 +270,29 @@ int main(int argc, char* argv[]) {
 
 
         // regular use case
-        if (argc) {
+        if (argc > 1) {
                 // check input
                 if (argc > 2) {
-                        printf("too many arguments. write the sudoku from left to right, top to bottom with no spaces\n");
+                        printf("Command line input sudoku was invalid.\n");
                         exit(1);
                 }
                 
                 // get sudoku from command line input
                 int sudoku[9][9];
+                int solution[9][9];
                 for (int i = 0; i < strlen(argv[1]); i++) {
                         sudoku[i/9][i%9] = argv[1][i] - 48;
+                        solution[i/9][i%9] = argv[1][i] - 48;
                 }
 
                 // solve sudoku
                 printf("you input:\n");
-                print_sudoku(sudoku);
+                printSudoku(sudoku);
 
-                solve_sudoku(sudoku, 0);
+                solve_sudoku(solution, 0);
 
                 printf("the solution is:\n");
-                print_sudoku(sudoku);
-        }
+                printSolved(sudoku, solution);
+        }       
 
 }
